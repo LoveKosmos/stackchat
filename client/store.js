@@ -1,5 +1,6 @@
 import {createStore, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import axios from 'axios';
 
 //Action TYPE
 const GOT_MESSAGES_FROM_SERVER = "GOT_MESSAGES_FROM_SERVER";
@@ -13,6 +14,14 @@ export const gotMessagesFromServer = (messages) => ({
 //initial state
 let initialState = {
   messages:[]
+}
+
+//thunk
+const fetchMessages = () => {
+  return async (dispatch) => {
+    const { data } = await axios.get('/api/messages')
+    dispatch (gotMessagesFromServer(data))
+  }
 }
 
 //reducer

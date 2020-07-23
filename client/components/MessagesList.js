@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import Message from './Message';
 import NewMessageEntry from './NewMessageEntry';
 import axios from 'axios';
+import connect from 'react-redux'
+import fetchMessages from '../store'
 
-export default class MessagesList extends Component {
+export class MessagesList extends Component {
 
   constructor () {
     super();
@@ -11,9 +13,10 @@ export default class MessagesList extends Component {
   }
 
   async componentDidMount () {
-    const response = await axios.get('/api/messages');
-    const messages = response.data;
-    this.setState({ messages });
+    this.props.fetchMessages()
+    // const response = await axios.get('/api/messages');
+    // const messages = response.data;
+    // this.setState({ messages });
   }
 
   render () {
@@ -32,3 +35,17 @@ export default class MessagesList extends Component {
     );
   }
 }
+
+const mapStateToProps = (state)=> {
+  return {
+    messages: state.messages
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+     getMessages: () => dispatch(fetchMessages())
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(MessagesList)
